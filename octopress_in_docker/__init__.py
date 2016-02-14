@@ -15,16 +15,18 @@ def main():
 
     root = os.path.abspath(args.octopress_root)
     try:
+        _cmd = ['/wrapper']
         if args.command[:2] != ['bundle', 'exec']:
-            _cmd = ['bundle', 'exec'] + args.command
+            _cmd += ['bundle', 'exec'] + args.command
         else:
-            _cmd = args.command
+            _cmd += args.command
     except Exception, exc:
         print exc
         return 1
 
     cmd = ['docker', 'run', '-it', '--rm', '-v', '%s:/src' % root,
-           '-p', '%s:4000' % args.port, 'xupeng/octopress'] + _cmd
+           '-p', '%s:4000' % args.port, '-e', 'DOCKER_UID=%s' % os.getuid(),
+           'xupeng/octopress'] + _cmd
     return subprocess.call(cmd)
 
 
