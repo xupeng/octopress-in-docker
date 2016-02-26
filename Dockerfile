@@ -12,6 +12,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y \
 		sudo \
 	&& apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 RUN sed -i -e 's/^# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/g' /etc/locale.gen && locale-gen en_US en_US.UTF-8
+RUN ln -s /usr/bin/python2.7 /usr/bin/python
 ENV LC_ALL en_US.utf8
 
 VOLUME ["/src"]

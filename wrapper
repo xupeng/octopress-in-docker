@@ -5,7 +5,7 @@ echo $*
 
 if ! id -nu ${DOCKER_UID} >/dev/null 2>&1; then
 	# User with id $DOCKER_UID does not exist, create one
-	useradd -u 1000 uid${DOCKER_UID}
+	useradd -m -u 1000 uid${DOCKER_UID}
 fi
 
 sudo -u "#${DOCKER_UID}" $*
