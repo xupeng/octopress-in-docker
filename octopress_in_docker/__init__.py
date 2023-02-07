@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import os
 import argparse
@@ -10,6 +10,7 @@ def main():
     parser.add_argument('-r', '--octopress-root', default='.',
                         help='directory of octopress source')
     parser.add_argument('-p', '--port', default=4000)
+    parser.add_argument('--sudo', action='store_true', default=False, help='Use sudo for running docker command')
     parser.add_argument('command', nargs='+')
     args = parser.parse_args()
 
@@ -20,13 +21,15 @@ def main():
             _cmd += ['bundle', 'exec'] + args.command
         else:
             _cmd += args.command
-    except Exception, exc:
-        print exc
+    except Exception as exc:
+        print(exc)
         return 1
 
-    cmd = ['docker', 'run', '-it', '--rm', '-v', '%s:/src' % root,
-           '-p', '%s:4000' % args.port, '-e', 'DOCKER_UID=%s' % os.getuid(),
+    cmd = ['docker', 'run', '-it', '--rm', '-v', f'{root}:/src',
+           '-p', f'{args.port}:4000', '-e', f'DOCKER_UID={os.getuid()}',
            'xupeng/octopress'] + _cmd
+    if args.sudo:
+        cmd = ['sudo'] + cmd
     return subprocess.call(cmd)
 
 
